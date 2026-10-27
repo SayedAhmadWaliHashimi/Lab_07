@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
@@ -14,9 +15,12 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Lab 07: Replaced previous dashboard closure with BookController
+    Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
+    
+    // Lab 07: Added route to store books
+    Route::post('/books', [BookController::class, 'store'])->name('books.store');
 
+    // Lab 06: Keep logout route exactly as it was
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
